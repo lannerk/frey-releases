@@ -302,8 +302,13 @@ Frey 的桌面端（Rust + Tauri），在 Frey 本身完成后开工。到时安
 ## 反馈
 
 - bug、建议、问题：开 [Issue](https://github.com/lannerk/frey-releases/issues)。请附 `frey --version` 的输出和复现步骤；**不要贴 key、会话文件或含路径的截图**。
-- 安全问题请不要开公开 Issue，发到仓库 About 里留的邮箱。
+- 安全问题请不要开公开 Issue，发邮件到 lannerk@qq.com。
 
 ## 许可
 
-Frey、Frey Core、Frey Craft 按 [EULA](EULA.md) 分发，可免费下载使用，不包含源码授权。`frey-core` 开源后以其源码仓的许可证为准。
+Frey、Frey Core、Frey Craft 是闭源软件，按 [EULA](EULA.md) 授权使用：
+
+- **预览版（1.0 之前，含 0.9.x）**：免费评估，**有使用期限**，到期后请更新到新的预览版（`frey update`）。到期日在 `frey --version` 和启动提示里显示。
+- **正式版（1.0 起）**：订阅付费使用。订阅方式、价格与试用安排在正式版发布前公布。
+- 不授予源码；禁止反编译、再分发、转售。`frey-core` 将来若开源，以其源码仓的许可证为准。
+- 第三方开源组件的声明见随包分发的 `THIRD-PARTY-NOTICES`。
