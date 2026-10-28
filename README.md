@@ -52,7 +52,7 @@ Frey 把模型、工具、会话状态、权限策略、上下文压缩串成一
 | **会话** | 只追加的 JSONL；`--resume latest` 接着聊；被强杀后续接会自动补上中断的工具结果 |
 | **插话** | 回复进行中直接打字：排队、或在下一个安全边界插入，不丢任务 |
 | **密钥不外泄** | key 只从环境变量读；`run_shell` 与 git 子进程看不到任何名字像密钥的变量 |
-| **三平台原生** | Windows 10 1809+ / 11、Linux x86_64 / aarch64、macOS 13+（Apple Silicon 与 Intel）；单文件、无依赖，HTTPS 用 rustls |
+| **三平台原生** | Windows 10 1809+ / 11、Linux x86_64 / aarch64（glibc 2.28 及以上：RHEL / Rocky 8、Debian 10、Ubuntu 20.04 起）、macOS 13+（Apple Silicon 与 Intel）；单文件、无依赖，HTTPS 用 rustls |
 
 ## 下载
 
@@ -66,7 +66,7 @@ Frey 把模型、工具、会话状态、权限策略、上下文压缩串成一
 | macOS Apple Silicon | `frey-<版本>-macos-aarch64.tar.gz` |
 | macOS Intel | `frey-<版本>-macos-x86_64.tar.gz` |
 
-每个包里只有三样：`frey`（Windows 是 `frey.exe`）、`VERSION`、`EULA.md`。
+每个包里只有四样：`frey`（Windows 是 `frey.exe`）、`VERSION`、`EULA.md`、`THIRD-PARTY-NOTICES`（所用开源组件的许可证与版权声明）。
 机器可读的「最新版是哪个、哪天发的、每个平台的下载地址和校验值」在 [`manifests/frey.json`](manifests/frey.json)。
 
 ## 安装
@@ -89,6 +89,8 @@ frey --version
 > 推荐用 Windows Terminal；旧的 conhost 控制台会自动降到基本模式。
 
 ### Linux
+
+要求 glibc 2.28 及以上（RHEL / Rocky / AlmaLinux 8、Debian 10、Ubuntu 20.04 及以后；`ldd --version` 看版本）。
 
 ```bash
 tar -xzf frey-*-linux-x86_64.tar.gz
