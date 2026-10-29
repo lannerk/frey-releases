@@ -1,20 +1,30 @@
 {
   "schema": 1,
   "product": "frey",
-  "version": "0.9.1",
-  "released": "2026-10-28",
-  "notes_url": "https://github.com/lannerk/frey-releases/releases/tag/v0.9.1",
+  "version": "0.9.2",
+  "released": "2026-10-29",
+  "notes_url": "https://github.com/lannerk/frey-releases/releases/tag/v0.9.2",
   "notes": [
-    "新增：首个版本：终端里的 AI 编程助手，能读代码、改文件、跑命令",
-    "新增：每一步按你选的权限模式决定要不要先问你",
-    "新增：支持十多家模型服务商，一处配置即可切换",
-    "新增：对话自动保存，下次接着聊；意外退出后也能接上",
-    "新增：干活途中可以随时插话补充要求，AI 不会丢下手上的事",
-    "新增：可以被其他程序调用，嵌入到你自己的工具里",
-    "新增：预览版每版可用 45 天，一条命令即可升级或退回上一版",
-    "新增：支持 Windows、Linux 与 macOS"
+    "新增：第一次运行就弹出设置：选服务商、贴 key、选模型，不用手写配置",
+    "新增：`/model` 随时换模型，`/settings` 改 key 与常用设置",
+    "新增：一句命令安装或卸载，不要管理员，自动加进 PATH",
+    "新增：Windows 上双击就能运行，会先问你在哪个项目里工作",
+    "新增：可以接入 MCP 服务器，它的工具经你批准后才交给 AI 用",
+    "修复：推理模型的长对话压缩不再中途失败"
   ],
   "changelog": [
+    {
+      "version": "0.9.2",
+      "released": "2026-10-29",
+      "notes": [
+        "新增：第一次运行就弹出设置：选服务商、贴 key、选模型，不用手写配置",
+        "新增：`/model` 随时换模型，`/settings` 改 key 与常用设置",
+        "新增：一句命令安装或卸载，不要管理员，自动加进 PATH",
+        "新增：Windows 上双击就能运行，会先问你在哪个项目里工作",
+        "新增：可以接入 MCP 服务器，它的工具经你批准后才交给 AI 用",
+        "修复：推理模型的长对话压缩不再中途失败"
+      ]
+    },
     {
       "version": "0.9.1",
       "released": "2026-10-28",
@@ -38,34 +48,34 @@
   },
   "platforms": {
     "windows-x86_64": {
-      "url": "https://github.com/lannerk/frey-releases/releases/download/v0.9.1/frey-0.9.1-windows-x86_64.zip",
-      "sha256": "06cc04a05d1719d939204baaa504695fa5ec73ecfb6ee06fac0ba6b02f7664a4",
-      "minisig": "untrusted comment: signature from minisign secret key\nRUQ2XW3PfirV22SkjK60HcRfgL1P/A/0l7B25IVM/hgWfHfQEJM9kyXQdqyYwO2BvUxWHrAnQ+Icr9hHLB3GqgvlFGNBfHhJbQs=\ntrusted comment: frey 0.9.1 frey-0.9.1-windows-x86_64.zip\n7PUwUzZRA5HKtmYS4zu/OnMgGIpJxKykxiXWiGE2UNDJpqWorafYQMQ3tqCMZYKXZ1w6vFaVmVrmXFxseSJ6Cw==\n",
-      "size": 5279541
+      "url": "https://github.com/lannerk/frey-releases/releases/download/v0.9.2/frey-0.9.2-windows-x86_64.zip",
+      "sha256": "6d63d20cb0f708e7284804ce53660bdf51ee3e103ef20e8751eec8bbd77db4ce",
+      "minisig": "untrusted comment: signature from minisign secret key\nRUQ2XW3PfirV2zCxEr45COjy5LBJy1u2oPFC94oZlkei7ILke/3ltK6vbM7mUsHDkRsa2sPwKRU35as5XtVOiJ2VWD/6i56PYgw=\ntrusted comment: frey 0.9.2 frey-0.9.2-windows-x86_64.zip\n4RpjWepY2RWldSq5p+s3g84x+kfCcYXj8IbnA552KpJF8TNqm37vEK0bivP4YhyojYvF1kuBVkabi8K6osQ2AA==\n",
+      "size": 7332194
     },
     "linux-x86_64": {
-      "url": "https://github.com/lannerk/frey-releases/releases/download/v0.9.1/frey-0.9.1-linux-x86_64.tar.gz",
-      "sha256": "de2558e4185f078adc069c9fc92669249c1f62509e9a4ac284215235696419bc",
-      "minisig": "untrusted comment: signature from minisign secret key\nRUQ2XW3PfirV2yMDGBD0OgXt0EJkk79PG4Wgz0UjwiCkBCIKZzj7AA5dy4hStcJU5I/C6nxUAGrisHb8MScc+nFyHoPGgzbdhww=\ntrusted comment: frey 0.9.1 frey-0.9.1-linux-x86_64.tar.gz\nI9xXCzxf3dRw/dvqi2aMAWenHj2I2ms7Z6J11n6K4ZYWpNPkRVQ5lVWC+LXAa5nde/E3adLRprwg7bZ8aAH8Dw==\n",
-      "size": 5367748
+      "url": "https://github.com/lannerk/frey-releases/releases/download/v0.9.2/frey-0.9.2-linux-x86_64.tar.gz",
+      "sha256": "2cc4fa8eb83ed6432ede0626eaff2b01412d2c6915618a991a99f49f20cec395",
+      "minisig": "untrusted comment: signature from minisign secret key\nRUQ2XW3PfirV21jvyze1gTzR8guLc9R07ovndtSj95gS7XP0kGIiDsAe9I5RyZ4sszCuhjXByoBThw1slnY2GVbeH653+hKTNwQ=\ntrusted comment: frey 0.9.2 frey-0.9.2-linux-x86_64.tar.gz\nUKktVrQ19Wg/hF0frEy0cCCIKKfEC2f+XH9CYYcjG8NLKYPWMUpnE0bMse92WFBGhQ9QKQhqrVvIGFBG8NUsCg==\n",
+      "size": 7242675
     },
     "linux-aarch64": {
-      "url": "https://github.com/lannerk/frey-releases/releases/download/v0.9.1/frey-0.9.1-linux-aarch64.tar.gz",
-      "sha256": "d35d4e2af1640c4790800b88b2bbd3713002c84e1b7839a92d6ad8bdff849b4f",
-      "minisig": "untrusted comment: signature from minisign secret key\nRUQ2XW3PfirV24972m1kHneNbrNRTd8w0vH6DqpfE5Mq+YsmwI5bvd3M/bpsSp8Eg94X/ngy4Iec1XcBdYpnlEU2j6Sw5qFBRw8=\ntrusted comment: frey 0.9.1 frey-0.9.1-linux-aarch64.tar.gz\nRYJvRyUgle6IIhRNYVCcWw+m8p5186FlVew4XpBYH1aZ1AvhktXCvNx85FiL1Q71T+n0Y+LwOMsPFEQI2RWnDg==\n",
-      "size": 4951558
+      "url": "https://github.com/lannerk/frey-releases/releases/download/v0.9.2/frey-0.9.2-linux-aarch64.tar.gz",
+      "sha256": "f84c3af4d96eff91926834ca0008240971555b6c8dcc9ee7ccf793788da020e1",
+      "minisig": "untrusted comment: signature from minisign secret key\nRUQ2XW3PfirV2y7IO+b0gXbfLnKVco/mEyFERKpYiKmNNdXGxT0DWCBN/2mPkystW/OJLGGqt8UZ86tyB8wKzygEOxsb+L9pJAk=\ntrusted comment: frey 0.9.2 frey-0.9.2-linux-aarch64.tar.gz\nv6USkrWYZjPlvgUcTjKrSZed1JGvuIbII4zuDGPTOaArBbC1jkbAtLgTROvRX2QDsYpeMtpTLHDLJldNTjArDg==\n",
+      "size": 6700274
     },
     "macos-aarch64": {
-      "url": "https://github.com/lannerk/frey-releases/releases/download/v0.9.1/frey-0.9.1-macos-aarch64.tar.gz",
-      "sha256": "b0fb23cf443eb434a6dc3fa5cf87ebed3b3f9112afff427ea5288002b0c8a2c3",
-      "minisig": "untrusted comment: signature from minisign secret key\nRUQ2XW3PfirV2wlkvFWBCiCo6WHLr63p0ud2cJMNmx6KfDyeYHM1DWVf6OOebHZj2DfzirnKHGSmeKzIcqxWu3/GDwjQncngiQ0=\ntrusted comment: frey 0.9.1 frey-0.9.1-macos-aarch64.tar.gz\nJPc+LWbhTLjOOvr1XJDQsFvJdsVD4UIQbnRp+qIDPTxlPo6dZPFagqDsB0+FC7/JUpQzYQgVr2rM6cSj0ydACA==\n",
-      "size": 4830445
+      "url": "https://github.com/lannerk/frey-releases/releases/download/v0.9.2/frey-0.9.2-macos-aarch64.tar.gz",
+      "sha256": "b70b121b740e8c7a6cdc2d803a5474dad22f8d1ea31779ec31cb1ace6d1fefa9",
+      "minisig": "untrusted comment: signature from minisign secret key\nRUQ2XW3PfirV29Ud/5ffkI6RrN31oZP1nvt57ehrGKkjh2W5BKc3ux8BTAD7/FjHQjRajbJZ7djXU5tzaIcLv0WvQeBWsvwr9QI=\ntrusted comment: frey 0.9.2 frey-0.9.2-macos-aarch64.tar.gz\nF0GT+A1+VpMWYn68U8lFH3smZpK7h0s63a2QJb35sffSJWLv5DUwJFlU7qyfpTx04i8bZfVvw7v/H4JArI82BA==\n",
+      "size": 6539030
     },
     "macos-x86_64": {
-      "url": "https://github.com/lannerk/frey-releases/releases/download/v0.9.1/frey-0.9.1-macos-x86_64.tar.gz",
-      "sha256": "b74b6f4fe94dd149b358b0718af038c7d96d11340c27e9b8e52f863eea99baea",
-      "minisig": "untrusted comment: signature from minisign secret key\nRUQ2XW3PfirV25ciNR/bqCbdpMcDA22BprY/rHqXfRLapahJhO62GI3KzSGRQ1wvBNv5pPR1Up0DKWZ+qS5q8dZVyIUWrQ5Mzwo=\ntrusted comment: frey 0.9.1 frey-0.9.1-macos-x86_64.tar.gz\n/YR4t7/+bcE/VJLAcE2SzYbgQm9WwR4s/f9qG9mOmYlTzLJEt+EJR94Rf8CkNZzEPob16cdIruPwLKOoie78Cg==\n",
-      "size": 5258633
+      "url": "https://github.com/lannerk/frey-releases/releases/download/v0.9.2/frey-0.9.2-macos-x86_64.tar.gz",
+      "sha256": "02363aea860359b3ddc7c06dfc2315dde1d1675a1b496a43479f71308d5ba78d",
+      "minisig": "untrusted comment: signature from minisign secret key\nRUQ2XW3PfirV2+jLtaSQ1IsxUTF7RupWhMajUaKgLkAD7Z7ew5RPOWFLgQBo4E6a+mh5eb2h8UdhX9B1sWesO910B2jXBHe1qAs=\ntrusted comment: frey 0.9.2 frey-0.9.2-macos-x86_64.tar.gz\nMh+QGUW9GHmuPAvAwmGqLl2xC34jsTuooTD72kFQjq8Co7/nY5YnO4fnB8uwEBpkwQZJPNWehY2zwp0Yoq7nBQ==\n",
+      "size": 7127963
     }
   }
 }

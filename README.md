@@ -51,7 +51,7 @@ Frey 把模型、工具、会话状态、权限策略、上下文压缩串成一
 | **权限引擎** | 四种模式、allow / deny 规则、受保护路径，外加任何模式都放不开的硬性拒绝；每次放行或拒绝都记下是谁定的 |
 | **会话** | 只追加的 JSONL；`--resume latest` 接着聊；被强杀后续接会自动补上中断的工具结果 |
 | **插话** | 回复进行中直接打字：排队、或在下一个安全边界插入，不丢任务 |
-| **密钥不外泄** | key 只从环境变量读；`run_shell` 与 git 子进程看不到任何名字像密钥的变量 |
+| **密钥不外泄** | key 由 Frey 存在 `~/.frey/auth.toml`（只有你能读），不进会话与日志，文件工具读写不了它；`run_shell` 与 git 子进程看不到任何名字像密钥的变量 |
 | **三平台原生** | Windows 10 1809+ / 11、Linux x86_64 / aarch64（glibc 2.28 及以上：RHEL / Rocky 8、Debian 10、Ubuntu 20.04 起）、macOS 13+（Apple Silicon 与 Intel）；单文件、无依赖，HTTPS 用 rustls |
 
 ## 下载
@@ -71,41 +71,74 @@ Frey 把模型、工具、会话状态、权限策略、上下文压缩串成一
 
 ## 安装
 
-### Windows
+**一句命令装好，不要管理员**；装完新开一个终端，直接打 `frey`。
+
+Windows（PowerShell）：
 
 ```powershell
-# 1. 解压，把 frey.exe 放到一个在 PATH 里的目录，例如：
-New-Item -ItemType Directory -Force "$env:USERPROFILE\bin" | Out-Null
-Expand-Archive .\frey-*-windows-x86_64.zip -DestinationPath "$env:USERPROFILE\bin" -Force
-
-# 2. 第一次要把这个目录加进 PATH（只需一次，重开终端生效）：
-[Environment]::SetEnvironmentVariable("Path", $env:Path + ";$env:USERPROFILE\bin", "User")
-
-# 3. 验证
-frey --version
+irm https://raw.githubusercontent.com/lannerk/frey-releases/main/install.ps1 | iex
 ```
 
-> SmartScreen 弹「Windows 已保护你的电脑」时点「更多信息 → 仍要运行」。Frey 目前没有买代码签名证书；下载是否被改过，请按 [校验下载](#校验下载) 核签名。
-> 推荐用 Windows Terminal；旧的 conhost 控制台会自动降到基本模式。
-
-### Linux
-
-要求 glibc 2.28 及以上（RHEL / Rocky / AlmaLinux 8、Debian 10、Ubuntu 20.04 及以后；`ldd --version` 看版本）。
+Linux / macOS（终端）：
 
 ```bash
-tar -xzf frey-*-linux-x86_64.tar.gz
-install -m 755 frey ~/.local/bin/frey        # 或 sudo install -m 755 frey /usr/local/bin/frey
-frey --version
+curl -fsSL https://raw.githubusercontent.com/lannerk/frey-releases/main/install.sh | sh
 ```
 
-### macOS
+脚本做的事：从 [`manifests/frey.json`](manifests/frey.json) 找本平台的最新版 → 下载 → 核 SHA-256（对不上就停，机器上什么都不改）→ 放到 Windows 的 `%LOCALAPPDATA%\Programs\Frey\`、Linux / macOS 的 `~/.local/bin/` → 把这个目录加进**你自己的** PATH（Windows 写当前用户的环境变量；Linux / macOS 不在 PATH 里时往 shell 的启动文件加一行，带 `# added by frey installer` 标记）。**再跑一次就是升级。** 走系统或 `HTTPS_PROXY` 的代理。
+
+装完运行 `frey`，第一次会弹设置面板选服务商、贴 key（见 [快速开始](#快速开始)）——安装脚本不碰 key。
+
+<details>
+<summary>指定版本或安装目录</summary>
+
+```powershell
+$env:FREY_VERSION = "0.9.2"; $env:FREY_INSTALL_DIR = "D:\tools\frey"
+irm https://raw.githubusercontent.com/lannerk/frey-releases/main/install.ps1 | iex
+```
 
 ```bash
-tar -xzf frey-*-macos-aarch64.tar.gz          # Intel 机器换 macos-x86_64
-xattr -d com.apple.quarantine frey            # 还没有 Apple 公证，去掉隔离标记才能直接运行
-install -m 755 frey ~/.local/bin/frey
-frey --version
+curl -fsSL https://raw.githubusercontent.com/lannerk/frey-releases/main/install.sh | FREY_VERSION=0.9.2 FREY_INSTALL_DIR=~/bin sh
 ```
+
+</details>
+
+### 卸载
+
+同样一句命令：
+
+```powershell
+irm https://raw.githubusercontent.com/lannerk/frey-releases/main/uninstall.ps1 | iex
+```
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/lannerk/frey-releases/main/uninstall.sh | sh
+```
+
+或者不联网：`frey uninstall`。删掉程序、安装时加的那条 PATH（只删它自己加的）和 `~/.frey/updates/`（更新留下的旧版）。`~/.frey` 里的 key、会话、配置**默认保留**，会问你一次要不要一起删；直接全删：`frey uninstall --purge`；用脚本时是 `curl -fsSL …/uninstall.sh | sh -s -- --purge`，PowerShell 里先 `$env:FREY_PURGE = "1"` 再跑那一句。
+
+### 不用脚本，手动装
+
+从 [下载](#下载) 拿包，按平台：
+
+- **Windows**：解压后双击 `frey.exe`，选好项目目录和模型后，在 `/settings` 里选「Add frey to PATH for this user」，以后新开的终端里直接打 `frey`。
+  > SmartScreen 弹「Windows 已保护你的电脑」时点「更多信息 → 仍要运行」。Frey 目前没有买代码签名证书；下载是否被改过，请按 [校验下载](#校验下载) 核签名。推荐用 Windows Terminal；旧的 conhost 控制台会自动降到基本模式。
+- **Linux**（glibc 2.28 及以上：RHEL / Rocky / AlmaLinux 8、Debian 10、Ubuntu 20.04 及以后；`ldd --version` 看版本）：
+
+  ```bash
+  tar -xzf frey-*-linux-x86_64.tar.gz
+  install -m 755 frey ~/.local/bin/frey        # 或 sudo install -m 755 frey /usr/local/bin/frey
+  frey --version
+  ```
+
+- **macOS**：
+
+  ```bash
+  tar -xzf frey-*-macos-aarch64.tar.gz          # Intel 机器换 macos-x86_64
+  xattr -d com.apple.quarantine frey            # 浏览器下载的才有隔离标记；还没有 Apple 公证
+  install -m 755 frey ~/.local/bin/frey
+  frey --version
+  ```
 
 ### 从源码
 
@@ -113,37 +146,19 @@ frey --version
 
 ## 快速开始
 
-1. 准备一个模型 key，**只放环境变量**（Frey 不读写死在文件里的 key）：
-
-   ```bash
-   export DEEPSEEK_API_KEY=sk-...            # PowerShell: $env:DEEPSEEK_API_KEY = "sk-..."
-   ```
-
-2. 告诉 Frey 用哪家：写 `~/.frey/config.toml`（Windows：`%USERPROFILE%\.frey\config.toml`）
-
-   ```toml
-   [provider]
-   vendor = "deepseek"            # 预设会填好协议、地址、key 变量名
-   ```
-
-   别家要写模型名，例如 OpenRouter：
-
-   ```toml
-   [provider]
-   vendor = "openrouter"
-   model = "cohere/north-mini-code:free"     # key 放在 OPENROUTER_API_KEY
-   ```
-
-   本机 Ollama：`vendor = "ollama"`，`model = "qwen2.5-coder"`，不用 key。
-
-3. 到你的项目目录里启动：
+1. 按上面 [安装](#安装) 一句命令装好（或下载解压，见「手动装」）。
+2. 到你的项目目录里运行 `frey`（Windows 也可以直接双击 `frey.exe`，它会先问在哪个项目目录里工作）：
 
    ```bash
    cd your-project
    frey
    ```
 
-不想先配 key、只想看看界面：`frey --tui-demo`（假回复，不联网）。
+3. 第一次运行会弹出设置面板：**选服务商**（DeepSeek、OpenRouter、Ollama 等，打字可搜）→ **贴 key**（本机 Ollama 不用）→ Frey 试连一次 → **选模型** → 开始对话。
+
+   key 存在 `~/.frey/auth.toml`（只有你能读），服务商和模型存在 `~/.frey/config.toml`，都由 Frey 自己写，不用手写。以后换模型用 `/model`（Ctrl+S 存为默认），改 key、权限模式等用 `/settings`。
+
+不想先配 key、只想看看界面：`frey --tui-demo`（假回复，不联网）。环境变量、手写配置、脚本里怎么给 key，见 [进阶：配置文件与环境变量](#进阶配置文件与环境变量)。
 
 ## 使用教程
 
@@ -166,6 +181,8 @@ frey --version
 | `/add-dir <path>` | 本会话加一个工作区根目录 |
 | `/compact` | 立刻把到目前为止的对话压缩成摘要 |
 | `/update` | 检查并安装新版本（同 `frey update`） |
+| `/model [过滤词]` | 换模型：列出有 key 的服务商的模型，Enter 本会话用，Ctrl+S 存为默认 |
+| `/settings` | 服务商与 key（加、换、删）、新会话的权限模式、启动时检查更新、插话键、动画；Windows 上还能把 Frey 加进当前用户的 PATH |
 | `/exit` | 退出 |
 
 在一个有中断会话的目录里启动时，Frey 会先问要不要接上（24 小时内、上次没正常结束的会话）。
@@ -196,7 +213,9 @@ frey prompt --resume latest "继续"                                  # 接着�
 
 | 参数 | 作用 |
 |---|---|
+| `--provider <NAME>` | 本次用这家预设（`deepseek`、`openrouter`、`ollama` …），不改配置 |
 | `--model <MODEL>` | 覆盖配置里的模型 |
+| `--api-key <KEY>` | 本次用这个 key（优先于存着的和环境变量里的） |
 | `--profile <NAME>` | 内置 `coding`、`minimal`，或 `~/.frey/profiles/<NAME>.toml` |
 | `--add-dir <PATH>` | 加一个工作区根（可重复） |
 | `--resume <ID\|latest>` | 接着一个会话 |
@@ -218,11 +237,55 @@ frey rpc        # stdin / stdout 一行一个 JSON：hello → session.start →
 
 协议说明随版本附在 Release 页；版本号在 `frey --version` 的 `rpc` 一栏。
 
-### 配置与环境变量
+### 连接器（MCP 服务器）：`frey connectors`
+
+把一个 MCP 服务器接进来，它的工具就和内置工具一起给模型用（名字是 `mcp__<连接器>__<工具>`），审批照你的权限模式走：
+
+```bash
+frey connectors add files -- npx -y @modelcontextprotocol/server-filesystem ~/docs   # 本地服务器（stdio）
+frey connectors add deepwiki --url https://mcp.deepwiki.com/mcp                      # 远程服务器（Streamable HTTP）
+frey connectors list --check     # 都起一遍，看各自提供几个工具、有没有起不来的
+frey connectors test files       # 服务器改了工具说明？逐项列出变了什么，再问你一次
+frey connectors remove files
+```
+
+- 加的时候会把服务器的每个工具列给你看、问一次；**只有你批过、而且之后没变的工具才会交给模型**（批准记在 `~/.frey/connectors-approved.json`）。
+- 工具说自己只读的直接跑；只追加、不出本机的在 `workspace-write` 下跑；其余（可能删东西、要连别的服务）要问你。想放开某个连接器：`permissions.allow_rules = ["mcp__deepwiki__*"]`。
+- 配置在 `~/.frey/connectors.toml`；**密钥别写进去**，写 `headers = { Authorization = "Bearer ${MY_TOKEN}" }`，启动时从环境变量读。项目里的 `.frey/connectors.toml` 只能关掉连接器或缩小它的工具列表，不能加新的。
+
+### 进阶：配置文件与环境变量
+
+配置一般不用手写：首次运行的面板、`/model`、`/settings` 和下面的 `frey config` 都由程序写文件，**你手写的内容和注释会保留**。
+
+```bash
+frey config list                              # 看配置（key 只显示掩码）
+frey config set provider.model deepseek-reasoner
+frey config set-key deepseek                  # 隐藏输入 key；脚本里：echo "$KEY" | frey config set-key deepseek
+frey config remove-key deepseek
+frey config path                              # 两个文件在哪
+```
+
+key 按这个顺序取：`--api-key` ＞ `~/.frey/auth.toml` ＞ 环境变量。CI 和脚本里照旧可以只设环境变量：
+
+```bash
+export DEEPSEEK_API_KEY=sk-...                # PowerShell: $env:DEEPSEEK_API_KEY = "sk-..."
+frey prompt --provider deepseek "总结一下 src/ 的结构"
+```
+
+没有可用的 key 时 `frey prompt` 不发请求，提示一行后以退出码 2 退出。
+
+想手写也可以，`~/.frey/config.toml`（Windows：`%USERPROFILE%\.frey\config.toml`）：
+
+```toml
+[provider]
+vendor = "openrouter"                         # 预设会填好协议、地址、key 变量名
+model = "cohere/north-mini-code:free"
+```
 
 | 文件 | 作用 |
 |---|---|
-| `~/.frey/config.toml` | 用户配置：模型、权限、工具、压缩、更新 |
+| `~/.frey/config.toml` | 用户配置：服务商与模型、权限、工具、压缩、更新 |
+| `~/.frey/auth.toml` | 各服务商的 API key（Frey 写；Unix 上只有你能读；Frey 的工具不读它） |
 | `~/.frey/profiles/<名>.toml` | 一组可切换的设置 |
 | `<项目>/.frey/config.toml` | 项目配置，只能收紧 |
 | `AGENTS.md` 等指令文件 | 自动发现并放进 system prompt |
@@ -230,10 +293,11 @@ frey rpc        # stdin / stdout 一行一个 JSON：hello → session.start →
 
 | 环境变量 | 作用 |
 |---|---|
-| 配置里 `provider.api_key_env` 指的那个 | API key（预设各有默认名，如 `DEEPSEEK_API_KEY`） |
+| 配置里 `provider.api_key_env` 指的那个 | API key，没存 key 时用（预设各有默认名，如 `DEEPSEEK_API_KEY`） |
 | `NO_COLOR` | 不着色 |
 | `FREY_THEME=light` | 浅色终端配色 |
 | `FREY_TUI_BASIC=0\|1` | 强制关 / 开基本模式 |
+| `FREY_PROGRAM_STATUS=0` | 不发 OSC 7501 程序状态（标签页上的「工作中 / 等审批 / 完成」） |
 
 ## Demo
 
