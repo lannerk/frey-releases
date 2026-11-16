@@ -46,7 +46,7 @@ main() {
   fi
   rm -f "$dir"/.frey.new.* 2> /dev/null
 
-  for rc in "$HOME/.bashrc" "$HOME/.bash_profile" "$HOME/.zshrc" "$HOME/.profile" "$HOME/.config/fish/config.fish"; do
+  for rc in "$HOME/.bashrc" "$HOME/.bash_profile" "$HOME/.bash_login" "$HOME/.zshrc" "$HOME/.profile" "$HOME/.config/fish/config.fish"; do
     [ -f "$rc" ] && grep -qF "$MARK" "$rc" || continue
     # Rewritten in place (cat >), so the file keeps its owner, mode and links.
     grep -vF "$MARK" "$rc" > "$rc.frey-uninstall" || true

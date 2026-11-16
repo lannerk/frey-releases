@@ -196,8 +196,17 @@ add_to_path() {
   case "${SHELL##*/}" in
     zsh) rc="$HOME/.zshrc"; line="export PATH=\"$shown:\$PATH\" $MARK" ;;
     bash)
-      # macOS terminals start login shells: ~/.bash_profile; Linux ones read ~/.bashrc.
-      if [ "$(uname -s)" = Darwin ]; then rc="$HOME/.bash_profile"; else rc="$HOME/.bashrc"; fi
+      # Linux terminals start interactive shells: ~/.bashrc. macOS ones start login shells, which read only
+      # the first of ~/.bash_profile, ~/.bash_login, ~/.profile that exists (bash(1), INVOCATION): write to
+      # that one, and create ~/.bash_profile only when there is none - a new one would hide ~/.profile.
+      if [ "${FREY_TEST_UNAME:-$(uname -s)}" = Darwin ]; then
+        rc="$HOME/.bash_profile"
+        for f in "$HOME/.bash_profile" "$HOME/.bash_login" "$HOME/.profile"; do
+          if [ -e "$f" ]; then rc=$f; break; fi
+        done
+      else
+        rc="$HOME/.bashrc"
+      fi
       line="export PATH=\"$shown:\$PATH\" $MARK"
       ;;
     fish)
